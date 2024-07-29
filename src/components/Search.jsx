@@ -32,7 +32,6 @@ const Search = () => {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         setUser(doc.data());
-        console.log(doc.data());
       });
     } catch (error) {
       setError(true);
@@ -51,7 +50,7 @@ const Search = () => {
 
     try {
       const response = await getDoc(doc(db, "chats", combinedUID));
-      console.log(response);
+
       if (!response.exists()) {
         await setDoc(doc(db, "chats", combinedUID), { messages: [] });
 

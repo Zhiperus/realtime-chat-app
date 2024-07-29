@@ -18,8 +18,6 @@ const Messages = () => {
     };
   }, [data.chatId]);
 
-  console.log(messages);
-
   return (
     <div class="flex flex-col gap-10 p-5 h-5/6 overflow-y-scroll">
       {messages.map((m) => {

@@ -22,7 +22,6 @@ function App() {
     }
   };
 
-  console.log(currentUser);
   return (
     <BrowserRouter basename={"/realtime-chat-app"}>
       <Routes>
@@ -35,8 +34,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
+          <Route path="/realtime-chat-app/login" element={<Login />} />
+          <Route path="/realtime-chat-app/register" element={<Register />} />
           <Route />
         </Route>
       </Routes>
