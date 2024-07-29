@@ -18,23 +18,21 @@ function App() {
 
   console.log(currentUser);
   return (
-    <HashRouter>
-      <Routes>
-        <Route path="/">
-          <Route
-            index
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route />
-        </Route>
-      </Routes>
-    </HashRouter>
+    <Routes>
+      <Route path="/">
+        <Route
+          index
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route />
+      </Route>
+    </Routes>
   );
 }
 
