@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://zhiperus.github.io/realtime-chat-app/login",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
