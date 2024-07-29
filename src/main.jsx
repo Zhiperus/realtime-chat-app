@@ -7,9 +7,11 @@ import { ChatContextProvider } from "./context/ChatContext.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <AuthContextProvider>
-    <ChatContextProvider>
-      <App />
-    </ChatContextProvider>
-  </AuthContextProvider>
+  <React.StrictMode>
+    <AuthContextProvider>
+      <ChatContextProvider>
+        <App />
+      </ChatContextProvider>
+    </AuthContextProvider>
+  </React.StrictMode>
 );

@@ -23,7 +23,7 @@ function App() {
   };
 
   return (
-    <BrowserRouter basename={"/realtime-chat-app"}>
+    <HashRouter>
       <Routes>
         <Route path="/">
           <Route
@@ -34,12 +34,12 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/realtime-chat-app/login" element={<Login />} />
-          <Route path="/realtime-chat-app/register" element={<Register />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
           <Route />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
