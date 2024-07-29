@@ -6,17 +6,10 @@ import { AuthContextProvider } from "./context/AuthContext";
 import { ChatContextProvider } from "./context/ChatContext.jsx";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 
-const router = createHashRouter([
-  {
-    path: "/*",
-    element: <App />,
-  },
-]);
-
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthContextProvider>
     <ChatContextProvider>
-      <RouterProvider router={router} />
+      <App />
     </ChatContextProvider>
   </AuthContextProvider>
 );
