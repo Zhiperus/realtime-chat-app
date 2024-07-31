@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage, ref } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  apiKey: "AIzaSyC0o7hSN-hcGKU80ouwa9wXMOU2gKKWKBc",
   authDomain: "realtime-chat-app-82aed.firebaseapp.com",
   projectId: "realtime-chat-app-82aed",
   storageBucket: "realtime-chat-app-82aed.appspot.com",
