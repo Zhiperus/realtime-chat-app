@@ -7,8 +7,8 @@ const Chat = () => {
   const { data } = useContext(ChatContext);
 
   return (
-    <div class="basis-full bg-graygreen">
-      <div class="bg-lime-800 p-5 text-whitegreen">
+    <div className="basis-full bg-graygreen">
+      <div className="bg-lime-800 p-5 text-whitegreen">
         <span>{data.user?.displayName}</span>
       </div>
       <Messages />

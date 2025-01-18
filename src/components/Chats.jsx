@@ -35,20 +35,20 @@ const Chats = () => {
         .map((chat) => (
           <div
             key={chat[0]}
-            class="flex items-center gap-3 p-3 cursor-pointer text-whitegreen hover:bg-darkgreen"
+            className="flex items-center gap-3 p-3 cursor-pointer text-whitegreen hover:bg-darkgreen"
             onClick={() => {
               handleSelect(chat[1].userInfo);
             }}
           >
             <img
-              class="h-10 w-10 rounded-full object-cover"
+              className="h-10 w-10 rounded-full object-cover"
               src={chat[1].userInfo.photoURL}
             />
             <div>
-              <span class="font-bold text-lg">
+              <span className="font-bold text-lg">
                 {chat[1].userInfo.displayName}
               </span>
-              <p class="text-sm">{chat[1].lastMessage?.text}</p>
+              <p className="text-sm">{chat[1].lastMessage?.text}</p>
             </div>
           </div>
         ))}
