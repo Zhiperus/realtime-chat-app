@@ -5,7 +5,7 @@ import Chats from "./Chats";
 
 const Sidebar = () => {
   return (
-    <div class="basis-1/2 bg-green">
+    <div className="basis-1/2 bg-white">
       <Navbar />
       <Search />
       <Chats />

@@ -1,13 +1,17 @@
 import React, { useState } from "react";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, storage, db } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
+import { Avatar } from "@mui/material";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import ClearIcon from "@mui/icons-material/Clear";
 
 function Register() {
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(null);
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -17,7 +21,9 @@ function Register() {
       email: { value: email },
       password: { value: password },
     } = e.target;
-    const file = e.target[3].files[0];
+
+    setLoading(true);
+    setError(false);
 
     try {
       const response = await createUserWithEmailAndPassword(
@@ -27,7 +33,7 @@ function Register() {
       );
       const storageRef = ref(storage, username);
 
-      const uploadTask = uploadBytesResumable(storageRef, file);
+      const uploadTask = uploadBytesResumable(storageRef, image);
 
       uploadTask.on(
         "state_changed",
@@ -35,87 +41,145 @@ function Register() {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
         },
         (error) => {
           setError(true);
+          setLoading(false);
         },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            await updateProfile(response.user, {
-              displayName: username,
-              photoURL: downloadURL,
-            });
-            await setDoc(doc(db, "users", response.user.uid), {
-              uid: response.user.uid,
-              displayName: username,
-              displayName_insensitive: username.toLowerCase(),
-              email,
-              photoURL: downloadURL,
-            });
-            await setDoc(doc(db, "userChats", response.user.uid), {});
-            navigate("/");
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          await updateProfile(response.user, {
+            displayName: username,
+            photoURL: downloadURL,
           });
+          await setDoc(doc(db, "users", response.user.uid), {
+            uid: response.user.uid,
+            displayName: username,
+            displayName_insensitive: username.toLowerCase(),
+            email,
+            photoURL: downloadURL,
+          });
+          await setDoc(doc(db, "userChats", response.user.uid), {});
+          navigate("/");
         }
       );
     } catch (error) {
       setError(true);
+      setLoading(false);
     }
   }
 
   return (
-    <div class="flex justify-center items-center h-screen w-screen">
-      <div class="flex flex-col bg-graygreen p-10 items-center gap-5 rounded-lg">
-        <form
-          class="grid grid-cols-1 col-auto grid-rows-6 row-auto gap-2 w-80"
-          onSubmit={handleSubmit}
-        >
-          <h1 class="justify-self-center font-bold text-darkgreen-50 text-3xl">
-            ZhiperX Chat
-          </h1>
-          <span class="justify-self-center m-0">Register</span>
-          <input
-            class="col-span-1 opacity-30"
-            type="text"
-            id="username"
-            name="username"
-            placeholder="username"
-          />
-          <input
-            class="opacity-30"
-            type="text"
-            id="email"
-            name="email"
-            placeholder="email"
-          />
-          <input
-            class="opacity-30"
-            type="password"
-            id="password"
-            name="password"
-            placeholder="password"
-          />
-          <input style={{ display: "none" }} type="file" id="file" />
-          <label class="justify-self-center mt-4" htmlFor="file">
-            <AddPhotoAlternateIcon sx={{ fontSize: 50, color: "darkgreen" }} />
-            <span>Add a profile picture</span>
-          </label>
-          <button type="submit" value="Submit" class="bg-green p-2 rounded-md">
-            Sign Up
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br via-green-400 to-teal-500">
+      <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full transform transition-all duration-300">
+        <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-6">
+          ZhiperX Chat
+        </h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter your username"
+              className="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              className="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              className="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              required
+            />
+          </div>
+          <div className="relative flex justify-center">
+            {image ? (
+              <>
+                <Avatar
+                  src={URL.createObjectURL(image)}
+                  sx={{ width: 100, height: 100 }}
+                />
+                <button
+                  className="absolute left-56 bg-red-200 p-[1px] rounded-full"
+                  onClick={() => setImage(null)}
+                >
+                  <ClearIcon />
+                </button>
+              </>
+            ) : (
+              <>
+                <input
+                  style={{ display: "none" }}
+                  name="file"
+                  type="file"
+                  id="file"
+                  accept="image/*"
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
+                <label
+                  htmlFor="file"
+                  className="flex items-center gap-2 cursor-pointer mt-4 text-teal-500 font-medium hover:underline"
+                >
+                  <AddPhotoAlternateIcon sx={{ fontSize: 24 }} />
+                  Add a profile picture
+                </label>
+              </>
+            )}
+          </div>
+          {error && (
+            <p className="text-red-500 text-sm">
+              Something went wrong. Please try again.
+            </p>
+          )}
+          <button
+            type="submit"
+            className={`w-full bg-teal-500 text-white py-3 rounded-lg font-semibold hover:bg-teal-600 transform hover:scale-105 transition-all duration-200 ${
+              loading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
+            disabled={loading}
+          >
+            {loading ? "Signing up..." : "Sign Up"}
           </button>
-          {error && <span>An error occurred</span>}
         </form>
-        <p class="border-t-2 border-green">
+        <p className="text-center text-sm text-gray-600 mt-4">
           Already have an account?{" "}
-          <Link to="/login">
-            <a>Login now</a>
+          <Link
+            to="/login"
+            className="text-teal-500 font-medium hover:underline"
+          >
+            Login now
           </Link>
         </p>
       </div>
