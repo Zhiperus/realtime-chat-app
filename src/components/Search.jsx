@@ -84,7 +84,7 @@ const Search = () => {
     <div>
       <div>
         <input
-          class="bg-transparent w-full border-b border-graygreen p-3"
+          className="bg-transparent w-full border-b border-graygreen p-3"
           placeholder="Search for a user"
           onKeyDown={handleKey}
           onChange={(e) => setUsername(e.target.value)}
@@ -95,10 +95,10 @@ const Search = () => {
       {user && (
         <div
           onClick={handleSelect}
-          class="flex items-center gap-3 p-3 cursor-pointer text-whitegreen hover:bg-darkgreen"
+          className="flex items-center gap-3 p-3 cursor-pointer text-whitegreen hover:bg-darkgreen"
         >
           <img
-            class="h-10 w-10 rounded-full object-cover"
+            className="h-10 w-10 rounded-full object-cover"
             src={user.photoURL}
           />
           <div>

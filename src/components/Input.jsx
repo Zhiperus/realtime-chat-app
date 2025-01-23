@@ -16,13 +16,15 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const Input = () => {
   const [text, setText] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
 
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
 
   async function handleSend() {
-    if (image) {
+    if (!text.replace(/\s/g, "").length && image === "") return;
+
+    if (image !== "") {
       const storageRef = ref(storage, uuid());
 
       const uploadTask = uploadBytesResumable(storageRef, image);
@@ -43,7 +45,7 @@ const Input = () => {
           }
         },
         (error) => {
-          setError(true);
+          console.log(error);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
@@ -88,16 +90,21 @@ const Input = () => {
   }
 
   return (
-    <div class="flex justify-between bg-whitegreen p-0">
+    <div
+      className="flex justify-between bg-whitegreen p-0"
+      onKeyDown={(e) => {
+        if (e.code === "Enter") handleSend();
+      }}
+    >
       <input
-        class="w-9/12 p-5 bg-transparent"
+        className="w-9/12 p-5 bg-transparent outline-none"
         type="text"
         onChange={(e) => setText(e.target.value)}
         value={text}
       />
-      <div class="flex gap-5 p-5 items-center">
+      <div className="flex gap-5 p-5 items-center">
         <input type="file" id="file" style={{ display: "none" }} />
-        <label class="cursor-pointer" htmlFor="file">
+        <label className="cursor-pointer" htmlFor="file">
           <AttachFileIcon />
         </label>
         <input
@@ -105,12 +112,11 @@ const Input = () => {
           id="image"
           style={{ display: "none" }}
           onChange={(e) => setImage(e.target.files[0])}
-          value={image}
         />
-        <label class="cursor-pointer" htmlFor="image">
+        <label className="cursor-pointer" htmlFor="image">
           <ImageIcon />
         </label>
-        <button class="bg-graygreen" onClick={handleSend}>
+        <button className="bg-graygreen" onClick={handleSend}>
           Send
         </button>
       </div>
