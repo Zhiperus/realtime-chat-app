@@ -35,7 +35,7 @@ const Chats = () => {
         .map((chat) => (
           <div
             key={chat[0]}
-            className="flex items-center gap-3 p-3 cursor-pointer text-whitegreen hover:bg-darkgreen"
+            className="flex items-center gap-3 p-3 cursor-pointer text-black hover:bg-darkgreen"
             onClick={() => {
               handleSelect(chat[1].userInfo);
             }}

@@ -16,13 +16,15 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const Input = () => {
   const [text, setText] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
 
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
 
   async function handleSend() {
-    if (image) {
+    if (!text.replace(/\s/g, "").length && image === "") return;
+
+    if (image !== "") {
       const storageRef = ref(storage, uuid());
 
       const uploadTask = uploadBytesResumable(storageRef, image);
@@ -43,7 +45,7 @@ const Input = () => {
           }
         },
         (error) => {
-          setError(true);
+          console.log(error);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
@@ -88,7 +90,12 @@ const Input = () => {
   }
 
   return (
-    <div className="flex justify-between bg-whitegreen p-0">
+    <div
+      className="flex justify-between bg-whitegreen p-0"
+      onKeyDown={(e) => {
+        if (e.code === "Enter") handleSend();
+      }}
+    >
       <input
         className="w-9/12 p-5 bg-transparent outline-none"
         type="text"
@@ -105,7 +112,6 @@ const Input = () => {
           id="image"
           style={{ display: "none" }}
           onChange={(e) => setImage(e.target.files[0])}
-          value={image}
         />
         <label className="cursor-pointer" htmlFor="image">
           <ImageIcon />

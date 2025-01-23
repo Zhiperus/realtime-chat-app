@@ -24,25 +24,27 @@ const Message = ({ message }) => {
           src={
             message.senderId === currentUser.uid
               ? currentUser.photoURL
-              : data.user.uid
+              : data.user.photoURL
           }
         />
-        <span className="opacity-45">Just Now</span>
+        {/* <span className="opacity-45">Just Now</span> */}
       </div>
       <div
         className={`flex flex-col gap-5 ${
           message.senderId === currentUser.uid ? "items-end " : ""
         }`}
       >
-        <p
-          className={`p-2 rounded-xl w-fit ${
-            message.senderId === currentUser.uid
-              ? "bg-darkgreen text-whitegreen"
-              : "bg-whitegreen"
-          }`}
-        >
-          {message.text}
-        </p>
+        {message.text !== "" && (
+          <p
+            className={`p-2 rounded-xl w-fit ${
+              message.senderId === currentUser.uid
+                ? "bg-darkgreen text-whitegreen"
+                : "bg-whitegreen"
+            }`}
+          >
+            {message.text}
+          </p>
+        )}
         {message.image && <img src={message.image} />}
       </div>
     </div>
