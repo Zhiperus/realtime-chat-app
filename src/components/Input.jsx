@@ -90,6 +90,8 @@ const Input = () => {
     setImage("");
   }
 
+  console.log(image);
+
   return (
     <div
       className="flex justify-between bg-whitegreen p-0"
@@ -112,9 +114,21 @@ const Input = () => {
           type="file"
           id="image"
           style={{ display: "none" }}
-          onChange={(e) => setImage(e.target.files[0])}
+          onChange={(e) => {
+            if (typeof e.target.files[0] === "undefined") return;
+            setImage(e.target.files[0]);
+          }}
         />
         <label className="cursor-pointer" htmlFor="image">
+          <div className="absolute bottom-36 right-72">
+            {image !== "" && (
+              <img
+                height={100}
+                width={100}
+                src={URL.createObjectURL(image)}
+              ></img>
+            )}
+          </div>
           <ImageIcon />
         </label>
         <button className="bg-graygreen" onClick={handleSend}>
