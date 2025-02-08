@@ -1,7 +1,7 @@
 import sys
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 
-texts = sys.argv[1];
+texts = sys.argv[1].split("\x1E");
 
 model_name = "SamLowe/roberta-base-go_emotions"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -24,12 +24,9 @@ for text in texts:
     for result in results[0]:  
         cumulative_scores[result["label"]] += result["score"]
 
-
 average_scores = {label: cumulative_scores[label] / len(texts) for label in emotion_labels}
-
 
 overall_emotion = max(average_scores, key=average_scores.get)
 
-
-print(overall_emotion)
+print(overall_emotion, end="");
 sys.stdout.flush();

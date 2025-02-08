@@ -22,6 +22,7 @@ const Input = () => {
   const { data } = useContext(ChatContext);
 
   async function handleSend() {
+    console.log(image);
     if (!text.replace(/\s/g, "").length && image === "") return;
 
     if (image !== "") {
@@ -86,7 +87,7 @@ const Input = () => {
     });
 
     setText("");
-    setImage(null);
+    setImage("");
   }
 
   return (
